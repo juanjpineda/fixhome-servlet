@@ -307,3 +307,6 @@ footer.pie { text-align: center; color: #6b7280; font-size: .85rem; padding: 3re
 }
 .franja-cta h3 { font-weight: 700; }
 .franja-cta p { color: #dbe6f3; }
+
+/* Formulario pequeño dentro de las tablas (botón eliminar) */
+td form { background: transparent; padding: 0; box-shadow: none; border-radius: 0; }

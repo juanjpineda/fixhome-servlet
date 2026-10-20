@@ -18,13 +18,27 @@ public class SvServicio extends HttpServlet {
         response.sendRedirect("consultarServicios.jsp");
     }
 
-    // POST: recibe los datos del formulario y los guarda en la base de datos
+    // POST: registra o elimina, según el formulario que llegue
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
 
+        // Si el formulario pide eliminar, se atiende aquí y termina
+        String accion = request.getParameter("accion");
+        if ("eliminar".equals(accion)) {
+            try {
+                int idEliminar = Integer.parseInt(request.getParameter("id"));
+                boolean eliminado = new CrudServicio().eliminarServicio(idEliminar);
+                response.sendRedirect("consultarServicios.jsp?msg=" + (eliminado ? "eliminado" : "error"));
+            } catch (NumberFormatException e) {
+                response.sendRedirect("consultarServicios.jsp?msg=error");
+            }
+            return;
+        }
+
+        // Registro de un servicio nuevo
         String mensaje;
         try {
             int id = Integer.parseInt(request.getParameter("id"));

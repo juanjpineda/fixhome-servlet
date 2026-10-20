@@ -56,4 +56,19 @@ public class CrudUsuario {
         }
         return lista;
     }
+
+    // ELIMINAR: borra un usuario por su identificación
+    public boolean eliminarUsuario(int id) {
+        String sql = "DELETE FROM usuario WHERE id_usuario = ?";
+        try (Connection cn = new MysqlConec().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException | NullPointerException e) {
+            System.out.println("Error al eliminar usuario: " + e.getMessage());
+            return false;
+        }
+    }
 }

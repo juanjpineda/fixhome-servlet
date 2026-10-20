@@ -53,4 +53,19 @@ public class CrudServicio {
         }
         return lista;
     }
+
+    // ELIMINAR: borra un servicio por su código
+    public boolean eliminarServicio(int id) {
+        String sql = "DELETE FROM servicio WHERE id_servicio = ?";
+        try (Connection cn = new MysqlConec().establecerConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException | NullPointerException e) {
+            System.out.println("Error al eliminar servicio: " + e.getMessage());
+            return false;
+        }
+    }
 }
