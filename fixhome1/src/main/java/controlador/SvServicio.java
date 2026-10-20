@@ -1,0 +1,49 @@
+package controlador;
+
+import dao.CrudServicio;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet(name = "SvServicio", urlPatterns = {"/SvServicio"})
+public class SvServicio extends HttpServlet {
+
+    // GET: se usa para consultar. Redirige a la página que lista los servicios
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect("consultarServicios.jsp");
+    }
+
+    // POST: recibe los datos del formulario y los guarda en la base de datos
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setCharacterEncoding("UTF-8");
+
+        String mensaje;
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String nombre = request.getParameter("nombre");
+            String descripcion = request.getParameter("descripcion");
+            double precio = Double.parseDouble(request.getParameter("precio"));
+
+            boolean guardado = new CrudServicio()
+                    .insertarServicio(id, nombre, descripcion, precio);
+
+            mensaje = guardado
+                    ? "Servicio registrado correctamente"
+                    : "No fue posible registrar. El código ya existe";
+
+        } catch (NumberFormatException e) {
+            mensaje = "El código y el precio deben ser números";
+        }
+
+        request.setAttribute("mensaje", mensaje);
+        request.getRequestDispatcher("formularioServicios.jsp").forward(request, response);
+    }
+}
